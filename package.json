@@ -1,10 +1,9 @@
 {
   "name": "uconfig",
   "description": "A Next.js/Nuxt.js-like universal runtime configuration",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "source": "uconfig.ts",
   "main": "dist/uconfig.js",
-  "exports": "./dist/uconfig.modern.js",
   "umd:main": "dist/uconfig.umd.js",
   "module": "dist/uconfig.m.js",
   "esmodule": "dist/uconfig.modern.js",
