@@ -36,6 +36,15 @@ function load() {
   }
 }
 
+function withProxy(target: RuntimeConfig) {
+  return new Proxy(target, {
+    get(target, prop) {
+      if (prop in target && typeof prop === 'string') return target[prop];
+      throw new ReferenceError(`${String(prop)} is not defined`);
+    },
+  });
+}
+
 export function getConfig(): RuntimeConfig {
   if (!config && canUseDOM()) {
     load();
@@ -43,14 +52,18 @@ export function getConfig(): RuntimeConfig {
   return config;
 }
 
-export function initConfig(v: RuntimeConfigSetting) {
+export function initConfig(
+  v: RuntimeConfigSetting,
+  throwErrorOnAbsent: boolean | undefined = false
+) {
   if (canUseDOM())
     throw new Error('initConfig() is not available on client side');
   settings = v;
-  config = {
+  const c: RuntimeConfig = {
     ...settings.publicRuntimeConfig,
     ...settings.serverRuntimeConfig,
   };
+  config = throwErrorOnAbsent ? withProxy(c) : c;
 }
 
 export function getConfigSettings(): RuntimeConfigSetting {
